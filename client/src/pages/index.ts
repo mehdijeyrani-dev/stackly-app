@@ -4,3 +4,4 @@ export { Upcoming } from "./upcoming";
 export { Completed } from "./completed";
 export { Favorites } from "./favorites";
 export { Reporting } from "./reporting";
+export { NotFound } from "./not-found";

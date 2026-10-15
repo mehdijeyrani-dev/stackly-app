@@ -3,6 +3,7 @@ import {
   Completed,
   Favorites,
   Inbox,
+  NotFound,
   Reporting,
   Today,
   Upcoming,
@@ -42,10 +43,10 @@ export const router = createBrowserRouter([
         path: "report",
         Component: Reporting,
       },
-      {
-        path: "*",
-        Component: Inbox,
-      },
     ],
+  },
+  {
+    path: "*",
+    Component: NotFound,
   },
 ]);
