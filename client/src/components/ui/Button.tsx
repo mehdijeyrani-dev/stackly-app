@@ -111,7 +111,7 @@ const sizeStyles: Record<Size, string> = {
   "extra-large": "px-6 py-4 text-xl",
   "full-width": "w-full",
   "fit-content": "w-fit",
-  icon: "size-8 p-1",
+  icon: "size-7 md:size-8 p-1",
 };
 
 const radiusStyles: Record<Radius, string> = {
