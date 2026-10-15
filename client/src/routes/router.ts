@@ -1,5 +1,12 @@
 import { Dashboard } from "@/layouts";
-import { Inbox } from "@/pages";
+import {
+  Completed,
+  Favorites,
+  Inbox,
+  Reporting,
+  Today,
+  Upcoming,
+} from "@/pages";
 import { createBrowserRouter } from "react-router";
 
 export const router = createBrowserRouter([
@@ -13,6 +20,30 @@ export const router = createBrowserRouter([
       },
       {
         path: "inbox",
+        Component: Inbox,
+      },
+      {
+        path: "today",
+        Component: Today,
+      },
+      {
+        path: "upcoming",
+        Component: Upcoming,
+      },
+      {
+        path: "completed",
+        Component: Completed,
+      },
+      {
+        path: "favorites",
+        Component: Favorites,
+      },
+      {
+        path: "report",
+        Component: Reporting,
+      },
+      {
+        path: "*",
         Component: Inbox,
       },
     ],

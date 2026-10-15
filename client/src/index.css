@@ -1,8 +1,6 @@
 @import "tailwindcss";
 
-
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
-
 
 :root {
   color-scheme: light;
@@ -58,8 +56,32 @@
   --color-border: var(--border);
 }
 
+@utility transition-default {
+  @apply transition-all duration-200;
+}
+
 @layer base {
   body {
-    @apply font-barlow;
+    @apply font-barlow bg-neutral-900;
   }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+
+.animated-rule {
+  border: none;
+  height: 1px;
+  width: 0;
+  margin-inline: auto;
+  background: #f6f6f6;
+  animation: slideIn 2s ease-in-out forwards infinite alternate;
+}
+
+@keyframes slideIn {
+  from { width: 0;}
+  to { width: 100%; }
 }

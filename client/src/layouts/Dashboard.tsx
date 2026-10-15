@@ -1,8 +1,11 @@
+import { Sidebar } from "./sidebar";
+import Main from "./Main";
+
 const Dashboard = () => {
   return (
     <div className="w-full h-dvh overflow-hidden relative flex">
-      <div className="">Sidebar</div>
-      <div className="">Main Section</div>
+      <Sidebar />
+      <Main />
     </div>
   );
 };
