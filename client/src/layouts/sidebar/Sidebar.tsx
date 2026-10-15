@@ -12,7 +12,7 @@ const Sidebar = () => {
 
   return (
     <aside
-      className={`hidden absolute top-0 left-0 w-14 md:w-72 h-full bg-transparent p-2 sm:flex flex-col gap-1 md:gap-2 ${isOpen ? "translate-x-0" : "-translate-x-full"} transition-default`}
+      className={`hidden absolute top-0 left-0 w-14 md:w-64 h-full bg-transparent p-2 sm:flex flex-col gap-1 md:gap-2 ${isOpen ? "translate-x-0" : "-translate-x-full"} transition-default`}
     >
       <SidebarHeader />
       <SidebarAction />
