@@ -1,8 +1,8 @@
+import useDocumentTitle from "@/hooks/useDocumentTitle";
 
 const Completed = () => {
-  return (
-    <div>Completed</div>
-  )
-}
+  useDocumentTitle("Completed");
+  return <div>Completed</div>;
+};
 
-export default Completed
+export default Completed;

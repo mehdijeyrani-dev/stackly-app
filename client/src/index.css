@@ -5,8 +5,11 @@
 :root {
   color-scheme: light;
 
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #ededed;
+  --foreground: #262626;
+
+  --surface: #fdfdfd;
+  --surface-border: #dbdbdb;
 
   --card: #ffffff;
   --card-foreground: #171717;
@@ -14,17 +17,24 @@
   --primary: #2563eb;
   --primary-foreground: #ffffff;
 
-  --muted: #f5f5f5;
+  --muted: #fafafa;
   --muted-foreground: #737373;
-
-  --border: #e5e5e5;
 }
 
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --background: #171717;
+  --background: #141414;
   --foreground: #fafafa;
+
+  --surface: #1a1a1a;
+  --surface-border: #313131;
+  --surface-primary: #155dfc;
+  --surface-secondary: #212121;
+  --surface-danger: #ec003f;
+  --surface-warning: #fcc800;
+  --surface-success: #00a63e;
+  --surface-info: #00a6f4;
 
   --card: #262626;
   --card-foreground: #fafafa;
@@ -32,17 +42,31 @@
   --primary: #3b82f6;
   --primary-foreground: #ffffff;
 
-  --muted: #262626;
+  --muted: #171717;
   --muted-foreground: #a3a3a3;
+  --ring: #404040;
 
   --border: #404040;
+  --destructive: oklch(0.704 0.191 22.216);
 }
 
 @theme inline {
+  --breakpoint-xs: 25rem;
   --font-barlow: "Barlow";
+  --font-mono: "JetBrains Mono";
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  --color-surface: var(--surface);
+  --color-surface-border: var(--surface-border);
+  --color-surface-primary: var(--surface-primary);
+
+  --color-surface-secondary: var(--surface-secondary);
+  --color-surface-danger: var(--surface-danger);
+  --color-surface-warning: var(--surface-warning);
+  --color-surface-success: var(--surface-success);
+  --color-surface-info: var(--surface-info);
 
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
@@ -54,6 +78,8 @@
   --color-muted-foreground: var(--muted-foreground);
 
   --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
 }
 
 @utility transition-default {
@@ -61,8 +87,17 @@
 }
 
 @layer base {
+  * {
+    @apply focus-visible:outline-none
+           focus-visible:ring-2
+           focus-visible:ring-blue-500/70
+           focus-visible:ring-offset-2
+           focus-visible:ring-offset-white
+           dark:focus-visible:ring-offset-neutral-900;
+  }
+
   body {
-    @apply font-barlow bg-neutral-900;
+    @apply font-barlow bg-background text-foreground;
   }
 
   button:not(:disabled),
@@ -70,7 +105,6 @@
     cursor: pointer;
   }
 }
-
 
 .animated-rule {
   border: none;
@@ -82,6 +116,23 @@
 }
 
 @keyframes slideIn {
-  from { width: 0;}
-  to { width: 100%; }
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* Disable animations temporarily when changing theme */
+html.theme-changing *,
+html.theme-changing *::before,
+html.theme-changing *::after {
+  transition: none !important;
+  animation: none !important;
+}
+
+.tag {
+  font-size: calc(3rem - (sibling-count() * 0.1rem));
+  @apply px-2 py-1 bg-neutral-800 rounded-md;
 }

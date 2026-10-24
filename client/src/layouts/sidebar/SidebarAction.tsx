@@ -1,30 +1,18 @@
 import Button from "@/components/ui/Button";
-import { PlusCircle, UsersRound } from "lucide-react";
+import { PlusSquare, UsersRound } from "lucide-react";
 
 const SidebarAction = () => {
   return (
-    <div className="w-10 h-fit md:w-full bg-neutral-800 shrink-0 flex flex-col items-center justify-center md:items-start gap-1 p-1 md:p-2 border border-neutral-700 rounded-md">
-      <Button
-        variant="ghost"
-        color="primary"
-        size="icon"
-        radius="sm"
-        className="md:w-full md:h-fit md:justify-start md:px-2 md:py-1 shrink-0 aspect-square md:aspect-auto text-blue-600 hover:text-blue-500 hover:bg-blue-900/20"
-      >
-        <PlusCircle size={20} />
-        <span className="font-semibold hidden md:inline-block md:text-base">
+    <div className="w-10 h-fit md:w-full bg-surface border border-surface-border shrink-0 flex flex-col items-center justify-center md:items-start gap-1 px-0.5 py-1 md:p-2 rounded-lg">
+      <Button variant="flat" iconSize="md" className="md:w-full md:justify-start md:p-2 rounded-md bg-transparent text-blue-500 hover:bg-blue-500/10 md:bg-blue-600 md:hover:bg-blue-700 md:text-white">
+        <PlusSquare strokeWidth={1.5} />
+        <span className="hidden md:inline-block">
           Add task
         </span>
       </Button>
-      <Button
-        variant="ghost"
-        color="secondary"
-        size="icon"
-        radius="sm"
-        className="md:w-full md:h-fit md:justify-start md:px-2 md:py-1 shrink-0 aspect-square md:aspect-auto"
-      >
-        <UsersRound size={20} strokeWidth={1} />
-        <span className="hidden md:inline-block md:text-base font-normal">
+      <Button variant="ghost" color="secondary" iconSize="md" className="md:w-full md:justify-start md:p-2 rounded-md">
+        <UsersRound strokeWidth={1} />
+        <span className="hidden md:inline-block font-normal">
           Add team
         </span>
       </Button>

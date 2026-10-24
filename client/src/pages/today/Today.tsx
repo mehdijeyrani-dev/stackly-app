@@ -1,7 +1,8 @@
-const Today = () => {
-  return (
-    <div>Today</div>
-  )
-}
+import useDocumentTitle from "@/hooks/useDocumentTitle";
 
-export default Today
+const Today = () => {
+  useDocumentTitle("Today")
+  return <div>Today</div>;
+};
+
+export default Today;

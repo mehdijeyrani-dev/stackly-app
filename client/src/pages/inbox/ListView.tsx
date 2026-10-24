@@ -1,71 +1,139 @@
-import Button from "@/components/ui/Button";
-import { Plus } from "lucide-react";
+import {
+  CalendarDays,
+  ChevronRight,
+  Ellipsis,
+  GripVertical,
+  Hash,
+  Workflow,
+} from "lucide-react";
+
+const TaskDetails = () => (
+  <>
+    <div className="flex gap-2">
+      <div className="mt-1 shrink-0">
+        <div className="w-4 h-4 rounded-full bg-rose-600/10 outline outline-rose-600" />
+      </div>
+
+      <div className="flex min-w-0 flex-col gap-0.5 pb-2">
+        <h2 className="leading-5 line-clamp-1">
+          Add support for important task details such as descriptions,
+          priorities, due dates, reminders, labels, and project assignments.
+        </h2>
+
+        <p className="text-xs text-neutral-400 line-clamp-1">
+          Add support for important task details such as descriptions,
+          priorities, due dates, reminders, labels, and project assignments.
+        </p>
+
+        <div className="flex flex-wrap items-center gap-1">
+          <div className="inline-flex items-center gap-0.5 rounded-sm bg-green-600/15 px-1 py-0.5 text-green-700">
+            <CalendarDays size={14} strokeWidth={1.5} />
+            <span className="text-xs">Aug 18, 2030</span>
+          </div>
+
+          <div className="inline-flex items-center gap-0.5 rounded-sm bg-neutral-100 px-1 py-0.5 text-neutral-600">
+            <Workflow size={14} strokeWidth={1.5} />
+            <span className="text-xs">4/10</span>
+          </div>
+
+          {["ui", "design", "project"].map((tag) => (
+            <div
+              key={tag}
+              className="inline-flex items-center gap-0.5 rounded-sm bg-neutral-100 px-1 py-0.5 text-neutral-600"
+            >
+              <Hash size={14} strokeWidth={1.5} />
+              <span className="text-xs">{tag}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </>
+);
+
+const DragHandle = () => (
+  <button
+    type="button"
+    aria-label="Reorder task"
+    className="absolute right-full top-1 mr-2 shrink-0 rounded-sm bg-neutral-200 p-1 opacity-0 transition-opacity group-hover/task:opacity-100"
+  >
+    <GripVertical size={14} />
+  </button>
+);
 
 const ListView = () => {
   return (
-    <div className="flex flex-col gap-2 w-8/12 mx-auto mt-20">
-      <div className="flex flex-wrap gap-2 w-full items-start">
-        <Button variant="default" color="primary" size="extra-small">
-          Button default primary
-        </Button>
-        <Button variant="default" color="primary" size="small">
-          Button default primary
-        </Button>
-        <Button variant="default" color="primary" size="medium">
-          Button default primary
-        </Button>
-        <Button variant="default" color="primary" size="large">
-          Button default primary
-        </Button>
-        <Button variant="default" color="primary" size="extra-large">
-          Button default primary
-        </Button>
-        <Button variant="default" color="primary" size="full-width">
-          Button default primary
-        </Button>
-        <Button variant="default" color="primary" size="fit-content">
-          Button default primary
-        </Button>
-        <Button variant="default" color="primary" size="icon" radius="full">
-          <Plus size={20} />
-        </Button>
-      </div>
+    <div className="mt-2 w-full min-h-0 flex-1 overflow-y-auto scrollbar-thin">
+      <div className="mx-auto flex w-9/12 flex-col gap-2">
+        {/* Status */}
+        <div>
+          <div className="group/status relative flex items-center gap-2">
+            <button
+              type="button"
+              aria-label="Reorder status"
+              className="absolute right-full mr-2 shrink-0 rounded-sm bg-neutral-200 p-1 opacity-0 transition-opacity group-hover/status:opacity-100"
+            >
+              <GripVertical size={14} />
+            </button>
 
-      <hr title="Secondary" className="shrink-0 animated-rule" />
-      <div className="flex flex-wrap gap-2 w-full items-start">
-        <Button variant="default" color="secondary" size="medium">
-          Button default secondary
-        </Button>
-        <Button variant="ghost" color="secondary" size="medium">
-          Button ghost secondary
-        </Button>
-        <Button variant="flat" color="secondary" size="medium">
-          Button flat secondary
-        </Button>
-        <Button variant="outline" color="secondary" size="medium">
-          Button outline secondary
-        </Button>
-        <Button variant="link" color="secondary" size="medium">
-          Button link secondary
-        </Button>
-      </div>
-      <hr className="shrink-0 animated-rule" />
-      <div className="flex flex-wrap gap-2 w-full items-start">
-        <Button variant="default" color="danger" size="medium">
-          Button default danger
-        </Button>
-        <Button variant="ghost" color="danger" size="medium">
-          Button ghost danger
-        </Button>
-        <Button variant="flat" color="danger" size="medium">
-          Button flat danger
-        </Button>
-        <Button variant="outline" color="danger" size="medium">
-          Button outline danger
-        </Button>
-        <Button variant="link" color="danger" size="medium">
-          Button link danger
-        </Button>
+            <div className="flex flex-1 items-center gap-2 rounded-t-md border-b border-neutral-300 bg-neutral-50 p-2">
+              <button type="button" className="rounded-sm bg-neutral-200 p-1">
+                <ChevronRight size={14} />
+              </button>
+
+              <div className="inline-flex items-baseline gap-4">
+                <span className="font-semibold">To do</span>
+                <span className="text-xs font-medium text-neutral-500">
+                  10
+                </span>
+              </div>
+
+              <button
+                type="button"
+                aria-label="Status options"
+                className="ml-auto rounded-sm bg-neutral-200 p-1"
+              >
+                <Ellipsis size={14} />
+              </button>
+            </div>
+          </div>
+
+          {/* Parent task */}
+          <div className="group/task relative ml-10 mt-1">
+            <DragHandle />
+
+            <div className="rounded-md bg-white px-2">
+              <TaskDetails />
+
+              {/* Child task */}
+              <div className="group/task relative ml-12 w-[calc(100% - 3rem)]">
+                <DragHandle />
+
+                <div className="rounded-md bg-white py-1">
+                  <TaskDetails />
+
+                  {/* Grandchild task */}
+                  <div className="group/task relative ml-12 w-[calc(100% - 3rem)]">
+                    <DragHandle />
+
+                    <div className="rounded-md bg-white py-1">
+                      <TaskDetails />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Another independent parent task */}
+          <div className="group/task relative ml-10 mt-1">
+            <DragHandle />
+
+            <div className="rounded-md bg-white px-2">
+              <TaskDetails />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -7,16 +7,16 @@ const SidebarToggle = () => {
 
   return (
     <Button
-      variant="ghost"
+      variant="outline"
       color="secondary"
-      size="icon"
+      iconSize="md"
       onClick={toggleSidebar}
-      className={`shrink-0 flex items-center justify-center hover:bg-neutral-700 ${isOpen ? "ml-5 md:-ml-8" : "ml-7 md:ml-8"} transition-default`}
+      className={`rounded-md ${isOpen ? "ml-3.5 md:-ml-8" : "ml-6.5 md:ml-5.5"}`}
     >
       {isOpen ? (
-        <PanelLeftClose size={20} strokeWidth={1.5} />
+        <PanelLeftClose size={20} strokeWidth={1} />
       ) : (
-        <PanelLeftOpen size={20} strokeWidth={1.5} />
+        <PanelLeftOpen size={20} strokeWidth={1} />
       )}
     </Button>
   );

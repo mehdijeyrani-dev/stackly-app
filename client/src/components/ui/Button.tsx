@@ -1,8 +1,7 @@
-import { forwardRef } from "react";
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 
-type Variant = "default" | "outline" | "flat" | "link" | "ghost";
+type Variant = "flat" | "solid" | "outline" | "ghost" | "link";
 
 type Color =
   | "primary"
@@ -10,19 +9,12 @@ type Color =
   | "danger"
   | "warning"
   | "info"
-  | "success";
+  | "success"
+  | "tertiary";
 
-type Size =
-  | "extra-small"
-  | "small"
-  | "medium"
-  | "large"
-  | "extra-large"
-  | "full-width"
-  | "fit-content"
-  | "icon";
+type Size = "xs" | "sm" | "md" | "lg" | "xl";
 
-type Radius = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "xxl" | "full";
+type IconSize = "xs" | "sm" | "md" | "lg" | "xl";
 
 export interface ButtonProps extends Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -32,110 +24,118 @@ export interface ButtonProps extends Omit<
   variant?: Variant;
   color?: Color;
   size?: Size;
-  radius?: Radius;
+  iconSize?: IconSize;
 }
 
 const baseStyles =
-  "inline-flex items-center justify-center gap-2 rounded-lg text-sm font-medium transition-default disabled:cursor-not-allowed disabled:opacity-40 px-4 py-2 shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:ring-offset-background";
+  "relative group/button inline-flex shrink-0 items-center justify-center font-medium border border-transparent bg-clip-padding whitespace-nowrap transition-default outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0";
 
 const variantBaseStyles: Record<Variant, string> = {
-  default: "",
   flat: "",
-  outline: "border bg-transparent",
-  link: "bg-transparent underline-offset-4 hover:underline",
-  ghost: "bg-transparent",
+  solid: "",
+  outline: "",
+  ghost: "",
+  link: "",
 };
 
 const colorStyles: Record<Color, Record<Variant, string>> = {
   primary: {
-    default:
-      "bg-blue-900/10 text-blue-600 hover:bg-blue-900/20 focus-visible:ring-blue-600",
-    flat: "bg-blue-500 text-white hover:bg-blue-600",
-    outline: "border-blue-500/20 text-blue-500 hover:bg-blue-500/15",
-    link: "text-blue-500 hover:text-blue-600",
-    ghost: "text-blue-500 bg-transparent hover:bg-blue-900/10",
+    flat: "bg-blue-600 hover:bg-blue-700",
+    solid:
+      "bg-blue-500/10 hover:bg-blue-500/20 border-transparent text-blue-500",
+    outline:
+      "bg-transparent hover:bg-blue-500/10 border-blue-500/10 text-blue-500",
+    ghost:
+      "bg-transparent hover:bg-blue-500/10 border-transparent text-blue-500",
+    link: "bg-transparent underline-offset-4 hover:underline border-transparent text-blue-500",
   },
   secondary: {
-    default:
-      "bg-neutral-700/20 text-white hover:bg-neutral-800 focus-visible:ring-neutral-700",
-    flat: "bg-neutral-700 text-white hover:bg-neutral-800 focus-visible:ring-neutral-700",
+    flat: "bg-neutral-800 hover:bg-neutral-700/80",
+    solid:
+      "bg-neutral-700/30 hover:bg-neutral-700/40 border-transparent text-neutral-500 hover:text-neutral-50",
     outline:
-      "border-neutral-700 text-neutral-400 hover:bg-neutral-700/20 hover:text-neutral-50 focus-visible:ring-neutral-700",
-    link: "text-neutral-400 hover:text-neutral-50 focus-visible:ring-neutral-700",
+      "bg-transparent hover:bg-neutral-700/30 border-neutral-700/30 text-neutral-500 hover:text-neutral-50",
     ghost:
-      "text-neutral-400 hover:bg-neutral-700/20 hover:text-neutral-50 focus-visible:ring-neutral-700",
+      "bg-transparent hover:bg-neutral-700/30 border-transparent text-neutral-500 hover:text-neutral-50",
+    link: "bg-transparent underline-offset-4 hover:underline border-transparent text-neutral-500 hover:text-neutral-50",
   },
   danger: {
-    default:
-      "bg-rose-900/15 text-rose-500 hover:bg-rose-900/25 focus-visible:ring-rose-500",
-    flat: "bg-rose-600 text-white hover:bg-rose-700 focus-visible:ring-rose-500",
+    flat: "bg-rose-600 hover:bg-rose-700",
+    solid:
+      "bg-rose-500/10 hover:bg-rose-500/20 border-transparent text-rose-500",
     outline:
-      "border-rose-600/30 text-rose-500 hover:bg-rose-900/15 focus-visible:ring-rose-500",
-    link: "text-rose-500 hover:text-rose-600 focus-visible:ring-rose-500",
-    ghost: "text-rose-500 hover:bg-rose-900/15 focus-visible:ring-rose-500",
-  },
-  success: {
-    default:
-      "bg-green-600 text-white hover:bg-green-700 focus-visible:ring-green-500",
-    flat: "bg-green-600 text-white hover:bg-green-700 focus-visible:ring-green-500",
-    outline:
-      "border-green-600 text-green-700 hover:bg-green-50 focus-visible:ring-green-500",
-    link: "text-green-600 hover:text-green-700 focus-visible:ring-green-500",
-    ghost: "text-green-700 hover:bg-green-50 focus-visible:ring-green-500",
-  },
-  info: {
-    default:
-      "bg-blue-600 text-white hover:bg-blue-700 focus-visible:ring-blue-500",
-    flat: "bg-blue-600 text-white hover:bg-blue-700 focus-visible:ring-blue-500",
-    outline:
-      "border-blue-600 text-blue-700 hover:bg-blue-50 focus-visible:ring-blue-500",
-    link: "text-blue-600 hover:text-blue-700 focus-visible:ring-blue-500",
-    ghost: "text-blue-700 hover:bg-blue-50 focus-visible:ring-blue-500",
+      "bg-transparent hover:bg-rose-500/10 border-rose-500/10 text-rose-500",
+    ghost:
+      "bg-transparent hover:bg-rose-500/10 border-transparent text-rose-500",
+    link: "bg-transparent underline-offset-4 hover:underline border-transparent text-rose-500",
   },
   warning: {
-    default:
-      "bg-purple-600 text-white hover:bg-purple-700 focus-visible:ring-purple-500",
-    flat: "bg-purple-600 text-white hover:bg-purple-700 focus-visible:ring-purple-500",
+    flat: "bg-yellow-400 hover:bg-yellow-600 text-neutral-800",
+    solid:
+      "bg-yellow-500/10 hover:bg-yellow-500/20 border-transparent text-yellow-500",
     outline:
-      "border-purple-600 text-purple-700 hover:bg-purple-50 focus-visible:ring-purple-500",
-    link: "text-purple-600 hover:text-purple-700 focus-visible:ring-purple-500",
-    ghost: "text-purple-700 hover:bg-purple-50 focus-visible:ring-purple-500",
+      "bg-transparent hover:bg-yellow-500/10 border-yellow-500/10 text-yellow-500",
+    ghost:
+      "bg-transparent hover:bg-yellow-500/10 border-transparent text-yellow-500",
+    link: "bg-transparent underline-offset-4 hover:underline border-transparent text-yellow-500",
+  },
+  success: {
+    flat: "bg-green-400 hover:bg-green-600 text-neutral-800",
+    solid:
+      "bg-green-500/10 hover:bg-green-500/20 border-transparent text-green-500",
+    outline:
+      "bg-transparent hover:bg-green-500/10 border-green-500/10 text-green-500",
+    ghost:
+      "bg-transparent hover:bg-green-500/10 border-transparent text-green-500",
+    link: "bg-transparent underline-offset-4 hover:underline border-transparent text-green-500",
+  },
+  info: {
+    flat: "bg-sky-400 hover:bg-sky-600 text-neutral-800",
+    solid: "bg-sky-500/10 hover:bg-sky-500/20 border-transparent text-sky-500",
+    outline:
+      "bg-transparent hover:bg-sky-500/10 border-sky-500/10 text-sky-500",
+    ghost: "bg-transparent hover:bg-sky-500/10 border-transparent text-sky-500",
+    link: "bg-transparent underline-offset-4 hover:underline border-transparent text-sky-500",
+  },
+  tertiary: {
+    flat: "bg-violet-500 hover:bg-violet-600 text-neutral-800",
+    solid:
+      "bg-violet-500/10 hover:bg-violet-500/20 border-transparent text-violet-500",
+    outline:
+      "bg-transparent hover:bg-violet-500/10 border-violet-500/10 text-violet-500",
+    ghost:
+      "bg-transparent hover:bg-violet-500/10 border-transparent text-violet-500",
+    link: "bg-transparent underline-offset-4 hover:underline border-transparent text-violet-500",
   },
 };
 
 const sizeStyles: Record<Size, string> = {
-  "extra-small": "px-2 py-1 text-xs",
-  small: "px-3 py-1.5 text-sm",
-  medium: "px-4 py-2 text-base",
-  large: "px-5 py-3 text-lg",
-  "extra-large": "px-6 py-4 text-xl",
-  "full-width": "w-full",
-  "fit-content": "w-fit",
-  icon: "size-7 md:size-8 p-1",
+  xs: "text-xs/3.5 px-1.5 py-1 rounded-md gap-0.75",
+  sm: "text-sm/4 px-2 py-1.25 rounded-md gap-1",
+  md: "text-base/5 px-2.25 py-1.5 rounded-lg gap-1.25",
+  lg: "text-base/6 px-2.5 py-1.75 rounded-lg gap-1.5",
+  xl: "text-lg/6 px-3 py-1.75 rounded-xl gap-1.5",
 };
 
-const radiusStyles: Record<Radius, string> = {
-  none: "rounded-none",
-  xs: "rounded-xs",
-  sm: "rounded-sm",
-  md: "rounded-md",
-  lg: "rounded-lg",
-  xl: "rounded-xl",
-  xxl: "rounded-2xl",
-  full: "rounded-full",
+const iconSizeStyles: Record<IconSize, string> = {
+  xs: "[&_svg]:size-3 p-1",
+  sm: "[&_svg]:size-4 p-1",
+  md: "[&_svg]:size-5 p-1",
+  lg: "[&_svg]:size-6 p-1",
+  xl: "[&_svg]:size-7 p-1.5",
 };
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       children,
-      variant = "default",
+      variant = "solid",
       color = "primary",
-      size = "medium",
-      radius = "md",
+      size = "md",
+      iconSize,
       className = "",
       type = "button",
-      ...rest
+      ...props
     },
     ref,
   ) => {
@@ -144,12 +144,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       variantBaseStyles[variant],
       colorStyles[color][variant],
       sizeStyles[size],
-      radiusStyles[radius],
+      iconSize && iconSizeStyles[iconSize],
       className,
     );
-
     return (
-      <button ref={ref} type={type} className={styles} {...rest}>
+      <button ref={ref} type={type} className={styles} {...props}>
         {children}
       </button>
     );

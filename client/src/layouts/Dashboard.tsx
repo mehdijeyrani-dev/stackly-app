@@ -3,7 +3,7 @@ import Main from "./Main";
 
 const Dashboard = () => {
   return (
-    <div className="w-full h-dvh overflow-hidden relative flex">
+    <div className="relative flex w-full h-dvh overflow-hidden">
       <Sidebar />
       <Main />
     </div>

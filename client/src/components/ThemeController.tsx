@@ -1,17 +1,27 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import { useThemeStore } from "../stores/themeStore";
 
 function ThemeController() {
   const theme = useThemeStore((state) => state.theme);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const root = document.documentElement;
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const applyTheme = () => {
+      root.classList.add("theme-changing");
+
       const resolvedTheme =
         theme === "system" ? (mediaQuery.matches ? "dark" : "light") : theme;
 
-      document.documentElement.dataset.theme = resolvedTheme;
+      root.dataset.theme = resolvedTheme;
+
+      // Re-enable animations after the theme update.
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          root.classList.remove("theme-changing");
+        });
+      });
     };
 
     applyTheme();
