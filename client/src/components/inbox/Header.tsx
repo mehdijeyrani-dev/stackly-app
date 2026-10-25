@@ -21,7 +21,7 @@ const Header = ({ mobileSidebarContainer }: HeaderProps) => {
 
   return (
     <header
-      className={`h-10 md:h-12 w-full bg-surface border border-surface-border rounded-lg flex items-center justify-between px-1 ${isOpen ? "sm:pl-9.5 md:pl-2" : "sm:pl-9.5 md:pl-9.5"} transition-default shrink-0`}
+      className={`h-10 md:h-12 w-full bg-surface border border-surface-border rounded-lg flex items-center justify-between px-1 ${isOpen ? "sm:pl-9.5 md:pl-2 md:pr-2" : "sm:pl-9.5 md:pl-10 md:pr-2"} transition-default shrink-0`}
     >
       <div className="flex items-center gap-2">
         <div className="flex items-center gap-1">

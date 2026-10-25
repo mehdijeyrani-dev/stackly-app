@@ -11,7 +11,7 @@ const SidebarToggle = () => {
       color="secondary"
       iconSize="md"
       onClick={toggleSidebar}
-      className={`rounded-md ${isOpen ? "ml-3.5 md:-ml-8" : "ml-6.5 md:ml-5.5"}`}
+      className={`rounded-md ${isOpen ? "ml-3.5 md:-ml-8" : "ml-6.5 md:ml-6"}`}
     >
       {isOpen ? (
         <PanelLeftClose size={20} strokeWidth={1} />

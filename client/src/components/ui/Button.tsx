@@ -44,7 +44,7 @@ const colorStyles: Record<Color, Record<Variant, string>> = {
     solid:
       "bg-blue-500/10 hover:bg-blue-500/20 border-transparent text-blue-500",
     outline:
-      "bg-transparent hover:bg-blue-500/10 border-blue-500/10 text-blue-500",
+      "bg-blue-500/5 hover:bg-blue-500/10 border-blue-500/10 text-blue-500",
     ghost:
       "bg-transparent hover:bg-blue-500/10 border-transparent text-blue-500",
     link: "bg-transparent underline-offset-4 hover:underline border-transparent text-blue-500",
@@ -122,7 +122,7 @@ const iconSizeStyles: Record<IconSize, string> = {
   sm: "[&_svg]:size-4 p-1",
   md: "[&_svg]:size-5 p-1",
   lg: "[&_svg]:size-6 p-1",
-  xl: "[&_svg]:size-7 p-1.5",
+  xl: "[&_svg]:size-7 p-1.5", 
 };
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
