@@ -3,24 +3,24 @@ import { CircleQuestionMark, Settings } from "lucide-react";
 
 const SidebarOptions = () => {
   return (
-    <div className="w-10 md:w-full bg-surface border border-surface-border rounded-md flex flex-col gap-1 p-1 md:p-2">
+    <div className="w-8 md:w-full h-fit bg-surface border border-surface-border rounded-lg flex flex-col items-center md:items-stretch gap-1 p-1 md:p-2">
       <Button
         variant="ghost"
         color="secondary"
-        className="w-full aspect-square md:aspect-auto rounded-sm p-0 md:px-2.25 md:py-1.5 md:justify-start"
+        className="md:justify-start rounded-md [&_svg]:size-4 md:[&_svg]:size-5 shrink-0 [&_svg]:shrink-0 size-6 md:size-auto"
       >
-        <Settings size={20} strokeWidth={1} className="shrink-0" />
-        <span className="hidden md:inline-block font-normal leading-5">
+        <Settings strokeWidth={1.5} />
+        <span className="text-sm/5 hidden md:inline-block font-normal">
           Settings
         </span>
       </Button>
       <Button
         variant="ghost"
         color="secondary"
-        className="w-full aspect-square md:aspect-auto rounded-sm p-0 md:px-2.25 md:py-1.5 md:justify-start"
+        className="md:justify-start rounded-md [&_svg]:size-4 md:[&_svg]:size-5 shrink-0 [&_svg]:shrink-0 size-6 md:size-auto"
       >
-        <CircleQuestionMark size={20} strokeWidth={1} className="shrink-0" />
-        <span className="hidden md:inline-block font-normal leading-5">
+        <CircleQuestionMark strokeWidth={1.5} />
+        <span className="text-sm/5 hidden md:inline-block font-normal">
           Help Center
         </span>
       </Button>

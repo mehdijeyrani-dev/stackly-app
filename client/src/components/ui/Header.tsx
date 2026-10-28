@@ -1,9 +1,9 @@
 import { useSidebarStore } from "@/stores";
-import Button from "../ui/Button";
+import Button from "./Button";
 import { Bell, DoorOpen, Moon, Sun } from "lucide-react";
 import { useThemeStore } from "@/stores/themeStore";
-import Divider from "../ui/Divider";
-import SearchBox from "./SearchBox";
+import Divider from "./Divider";
+import SearchBox from "../inbox/SearchBox";
 import { useNavigate } from "react-router";
 import SidebarMenuButton from "@/layouts/sidebar/SidebarMenuButton";
 
@@ -21,7 +21,7 @@ const Header = ({ mobileSidebarContainer }: HeaderProps) => {
 
   return (
     <header
-      className={`h-10 md:h-12 w-full bg-surface border border-surface-border rounded-lg flex items-center justify-between px-1 ${isOpen ? "sm:pl-9.5 md:pl-2 md:pr-2" : "sm:pl-9.5 md:pl-10 md:pr-2"} transition-default shrink-0`}
+      className={`w-full h-8 md:h-12 bg-surface border border-surface-border rounded-lg flex items-center justify-between px-1 ${isOpen ? "sm:pl-9.5 md:pl-2 md:pr-2" : "sm:pl-9.5 md:pl-10 md:pr-2"} transition-default shrink-0`}
     >
       <div className="flex items-center gap-2">
         <div className="flex items-center gap-1">
@@ -41,9 +41,9 @@ const Header = ({ mobileSidebarContainer }: HeaderProps) => {
           <Button
             variant="outline"
             color="secondary"
-            iconSize="md"
+            iconSize="xs"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="rounded-md"
+            className="rounded-md p-0 size-7"
           >
             {theme === "dark" ? (
               <Sun strokeWidth={1} />
@@ -54,7 +54,7 @@ const Header = ({ mobileSidebarContainer }: HeaderProps) => {
           <SearchBox />
         </div>
         <Divider className="hidden xs:block" />
-        <p className="hidden xs:inline-flex items-center gap-1 bg-surface-secondary px-2 py-1.25 sm:h-7 md:h-8 rounded-md font-mono text-neutral-50 text-sm">
+        <p className="hidden xs:inline-flex items-center gap-1 bg-surface-secondary px-2 py-1.25 rounded-md font-mono text-neutral-50 text-xs border border-surface-border leading-5">
           <span className="">Aug 18,</span>
           <span className="">2027 - Sat</span>
         </p>

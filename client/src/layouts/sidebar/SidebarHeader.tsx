@@ -1,12 +1,14 @@
 import SidebarLogo from "./SidebarLogo";
-import SidebarToggle from "./SidebarToggle";
+import { Link } from "react-router";
 
 const SidebarHeader = () => {
   return (
-    <div className="w-10 h-10 md:w-full md:h-12 bg-surface shrink-0 p-1 md:p-2 border border-surface-border rounded-lg flex items-center justify-between">
+    <Link
+      to="/inbox"
+      className="w-8 aspect-square md:aspect-auto md:w-full md:h-12 bg-surface border border-surface-border rounded-lg flex items-center justify-center md:justify-start gap-2 md:px-2"
+    >
       <SidebarLogo />
-      <SidebarToggle />
-    </div>
+    </Link>
   );
 };
 

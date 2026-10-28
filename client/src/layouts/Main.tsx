@@ -1,26 +1,20 @@
-import Header from "@/components/inbox/Header";
 import { useSidebarStore } from "@/stores";
-import { useState } from "react";
 import { Outlet } from "react-router";
 
 const Main = () => {
   const { isOpen } = useSidebarStore();
-  const [mobileSidebarContainer, setMobileSidebarContainer] =
-    useState<HTMLDivElement | null>(null);
 
   return (
-    <div
-      className={`flex-1 min-w-0 py-1 pr-1 flex flex-col ${isOpen ? "ml-1 sm:ml-12 md:ml-64 " : "ml-0 md:ml-0 px-1"} transition-default`}
+    <section
+      className={`flex-1 h-full bg-background p-1 ${isOpen ? "ml-0 xs:ml-10 md:ml-64 xs:pl-0 md:pl-1" : "ml-0 xs:pl-1"} transition-default`}
     >
-      <Header mobileSidebarContainer={mobileSidebarContainer} />
+      <header
+        className={`w-full h-8 md:h-12 bg-surface border border-surface-border rounded-lg ${isOpen ? "" : ""}`}
+      ></header>
       <>
-        <div
-          ref={setMobileSidebarContainer}
-          id="mobile-sidebar-container"
-        ></div>
         <Outlet />
       </>
-    </div>
+    </section>
   );
 };
 

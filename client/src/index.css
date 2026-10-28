@@ -52,7 +52,7 @@
 
 @theme inline {
   --breakpoint-xs: 25rem;
-  --font-barlow: "Barlow";
+  --font-inter: "Inter", "Sans", "Tahoma";
   --font-mono: "JetBrains Mono";
 
   --color-background: var(--background);
@@ -97,7 +97,7 @@
   }
 
   body {
-    @apply font-barlow bg-background text-foreground;
+    @apply font-inter bg-background text-foreground;
   }
 
   button:not(:disabled),

@@ -28,7 +28,7 @@ const Inbox = () => {
   const CurrentView = views[view];
 
   return (
-    <div className="w-full flex-1 min-h-0 rounded-md flex flex-col p-1">
+    <div className="w-full h-full flex-1 min-h-0 rounded-md flex flex-col">
       <div className="w-full h-12 shrink-0 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="inline-flex items-center gap-2">

@@ -4,10 +4,12 @@ import "./index.css";
 import { RouterProvider } from "react-router";
 import { router } from "./routes/router.ts";
 import ThemeController from "./components/ThemeController.tsx";
+// import App from "./learn/App.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeController />
     <RouterProvider router={router} />
+    {/* <App /> */}
   </StrictMode>,
 );
