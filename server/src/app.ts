@@ -1,5 +1,7 @@
 import express from "express";
 import errorHandler from "./middlewares/errorHandler.js";
+import validate from "./middlewares/validate.js";
+import taskSchema from "./schemas/task.schema.js";
 
 const app = express();
 
@@ -12,8 +14,11 @@ app.get("/api/health", (_req, res) => {
   });
 });
 
-app.get("/api/test-error", (_req, res) => {
-  throw new Error("Test server error");
+app.post("/api/test-validation", validate(taskSchema), (req, res) => {
+  res.status(201).json({
+    success: true,
+    data: req.body,
+  });
 });
 
 app.use(errorHandler);
