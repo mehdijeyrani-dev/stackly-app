@@ -1,8 +1,20 @@
 import "dotenv/config";
 import app from "./app.js";
+import connectDB from "./config/db.js";
 
 const PORT = Number(process.env.PORT) || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Stackly API is running on port ${PORT}`);
-});
+const startServer = async (): Promise<void> => {
+  try {
+    await connectDB();
+
+    app.listen(PORT, () => {
+      console.log(`Stackly API is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+};
+
+startServer();
