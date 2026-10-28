@@ -14,3 +14,13 @@ export const createTask: RequestHandler = async (req, res) => {
     data: task,
   });
 };
+
+export const getTasks: RequestHandler = async (_req, res) => {
+  const tasks = await Task.find().sort({ createdAt: -1 });
+
+  res.status(200).json({
+    success: true,
+    results: tasks.length,
+    data: tasks,
+  });
+};
