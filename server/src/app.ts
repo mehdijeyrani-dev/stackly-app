@@ -4,9 +4,10 @@ const app = express();
 
 app.use(express.json());
 
-app.get("/", (_req, res) => {
-  res.json({
-    message: "Welcome to Stackly API",
+app.get("/api/health", (_req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Stackly API is healthy",
   });
 });
 
