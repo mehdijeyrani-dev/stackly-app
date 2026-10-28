@@ -2,6 +2,7 @@ import express from "express";
 import errorHandler from "./middlewares/errorHandler.js";
 import validate from "./middlewares/validate.js";
 import taskSchema from "./schemas/task.schema.js";
+import taskRoutes from "./routes/task.routes.js";
 
 const app = express();
 
@@ -14,12 +15,7 @@ app.get("/api/health", (_req, res) => {
   });
 });
 
-app.post("/api/test-validation", validate(taskSchema), (req, res) => {
-  res.status(201).json({
-    success: true,
-    data: req.body,
-  });
-});
+app.use("/api/tasks", taskRoutes);
 
 app.use(errorHandler);
 
