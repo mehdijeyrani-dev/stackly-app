@@ -66,10 +66,12 @@ export const getTasks: RequestHandler = async (_req, res) => {
     success: true,
     data: tasks,
     pagination: {
-      page,
-      limit,
+      currentPage: page,
+      pageSize: limit,
       totalResults: total,
       totalPages: Math.ceil(total / limit),
+      hasNextPage: page < Math.ceil(total / limit),
+      hasPreviousPage: page > 1,
     },
   });
 };
