@@ -20,11 +20,19 @@ export const getTasks: RequestHandler = async (req, res) => {
   const page = Math.max(Number(req.query.page) || 1, 1);
   const limit = Math.min(Math.max(Number(req.query.limit) || 10, 1), 100);
 
+  const filter: { completed?: boolean } = {};
+
+  if (req.query.completed === "true") {
+    filter.completed = true;
+  } else if (req.query.completed === "false") {
+    filter.completed = false;
+  }
+
   const skip = (page - 1) * limit;
 
   const [tasks, total] = await Promise.all([
-    Task.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
-    Task.countDocuments(),
+    Task.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+    Task.countDocuments(filter),
   ]);
 
   res.status(200).json({
