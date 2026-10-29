@@ -52,3 +52,61 @@ export const getTaskById: RequestHandler = async (req, res) => {
     data: task,
   });
 };
+
+export const updateTask: RequestHandler = async (req, res) => {
+  const { id } = req.params;
+
+  if (!isValidObjectId(id)) {
+    res.status(400).json({
+      success: false,
+      message: "Invalid task ID",
+    });
+    return;
+  }
+
+  const task = await Task.findByIdAndUpdate(id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!task) {
+    res.status(404).json({
+      success: false,
+      message: "Task not found",
+    });
+    return;
+  }
+
+  res.status(200).json({
+    success: true,
+    data: task,
+  });
+};
+
+export const deleteTask: RequestHandler = async (req, res) => {
+  const { id } = req.params;
+
+  if (!isValidObjectId(id)) {
+    res.status(400).json({
+      success: false,
+      message: "Invalid task ID",
+    });
+    return;
+  }
+
+  const task = await Task.findByIdAndDelete(id);
+
+  if (!task) {
+    res.status(404).json({
+      success: false,
+      message: "Task not found",
+    });
+    return;
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Task deleted successfully",
+    data: task,
+  });
+};
