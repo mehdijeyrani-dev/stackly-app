@@ -15,6 +15,13 @@ app.get("/api/health", (_req, res) => {
 
 app.use("/api/tasks", taskRoutes);
 
+app.use((_req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Route not found",
+  });
+});
+
 app.use(errorHandler);
 
 export default app;
