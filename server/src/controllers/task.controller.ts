@@ -17,9 +17,13 @@ export const createTask: RequestHandler = async (req, res) => {
   });
 };
 
-export const getTasks: RequestHandler = async (req, res) => {
-  const page = Math.max(Number(req.query.page) || 1, 1);
-  const limit = Math.min(Math.max(Number(req.query.limit) || 10, 1), 100);
+export const getTasks: RequestHandler = async (_req, res) => {
+  const { page, limit, completed, search } = res.locals.validatedQuery as {
+    page: number;
+    limit: number;
+    completed?: "true" | "false";
+    search?: string;
+  };
 
   const filter: QueryFilter<{
     title: string;
@@ -27,14 +31,11 @@ export const getTasks: RequestHandler = async (req, res) => {
     completed: boolean;
   }> = {};
 
-  if (req.query.completed === "true") {
+  if (completed === "true") {
     filter.completed = true;
-  } else if (req.query.completed === "false") {
+  } else if (completed === "false") {
     filter.completed = false;
   }
-
-  const search =
-    typeof req.query.search === "string" ? req.query.search.trim() : "";
 
   if (search) {
     filter.$or = [
