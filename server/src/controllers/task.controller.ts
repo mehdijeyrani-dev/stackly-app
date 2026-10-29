@@ -1,16 +1,17 @@
 import { RequestHandler } from "express";
-import Task from "../models/Task.js";
 import { isValidObjectId } from "mongoose";
-import type { QueryFilter } from "mongoose";
-
-const escapeRegex = (value: string): string => {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-};
+import {
+  createTaskService,
+  deleteTaskService,
+  getTaskByIdService,
+  getTasksService,
+  updateTaskService,
+} from "../services/task.service.js";
 
 export const createTask: RequestHandler = async (req, res) => {
   const { title, description } = req.body;
 
-  const task = await Task.create({
+  const task = await createTaskService({
     title,
     description,
   });
@@ -22,8 +23,7 @@ export const createTask: RequestHandler = async (req, res) => {
 };
 
 export const getTasks: RequestHandler = async (_req, res) => {
-  const { page, limit, completed, search, sort } = res.locals
-    .validatedQuery as {
+  const query = res.locals.validatedQuery as {
     page: number;
     limit: number;
     completed?: "true" | "false";
@@ -31,55 +31,19 @@ export const getTasks: RequestHandler = async (_req, res) => {
     sort: "newest" | "oldest";
   };
 
-  const filter: QueryFilter<{
-    title: string;
-    description: string;
-    completed: boolean;
-  }> = {};
-
-  if (completed === "true") {
-    filter.completed = true;
-  } else if (completed === "false") {
-    filter.completed = false;
-  }
-
-  if (search) {
-    const escapedSearch = escapeRegex(search);
-
-    filter.$or = [
-      { title: { $regex: escapedSearch, $options: "i" } },
-      { description: { $regex: escapedSearch, $options: "i" } },
-    ];
-  }
-
-  const skip = (page - 1) * limit;
-
-  const [tasks, total] = await Promise.all([
-    Task.find(filter)
-      .sort({ createdAt: sort === "newest" ? -1 : 1 })
-      .skip(skip)
-      .limit(limit),
-    Task.countDocuments(filter),
-  ]);
+  const result = await getTasksService(query);
 
   res.status(200).json({
     success: true,
-    data: tasks,
-    pagination: {
-      currentPage: page,
-      pageSize: limit,
-      totalResults: total,
-      totalPages: Math.ceil(total / limit),
-      hasNextPage: page < Math.ceil(total / limit),
-      hasPreviousPage: page > 1,
-    },
+    data: result.tasks,
+    pagination: result.pagination,
   });
 };
 
 export const getTaskById: RequestHandler = async (req, res) => {
   const { id } = req.params;
 
-  if (!isValidObjectId) {
+  if (!isValidObjectId(id)) {
     res.status(400).json({
       success: false,
       message: "Invalid task ID",
@@ -87,7 +51,7 @@ export const getTaskById: RequestHandler = async (req, res) => {
     return;
   }
 
-  const task = await Task.findById(id);
+  const task = await getTaskByIdService(id);
 
   if (!task) {
     res.status(404).json({
@@ -114,10 +78,7 @@ export const updateTask: RequestHandler = async (req, res) => {
     return;
   }
 
-  const task = await Task.findByIdAndUpdate(id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  const task = await updateTaskService(id, req.body);
 
   if (!task) {
     res.status(404).json({
@@ -144,7 +105,7 @@ export const deleteTask: RequestHandler = async (req, res) => {
     return;
   }
 
-  const task = await Task.findByIdAndDelete(id);
+  const task = await deleteTaskService(id);
 
   if (!task) {
     res.status(404).json({
