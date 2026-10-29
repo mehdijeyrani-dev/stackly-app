@@ -18,11 +18,13 @@ export const createTask: RequestHandler = async (req, res) => {
 };
 
 export const getTasks: RequestHandler = async (_req, res) => {
-  const { page, limit, completed, search } = res.locals.validatedQuery as {
+  const { page, limit, completed, search, sort } = res.locals
+    .validatedQuery as {
     page: number;
     limit: number;
     completed?: "true" | "false";
     search?: string;
+    sort: "newest" | "oldest";
   };
 
   const filter: QueryFilter<{
@@ -47,7 +49,10 @@ export const getTasks: RequestHandler = async (_req, res) => {
   const skip = (page - 1) * limit;
 
   const [tasks, total] = await Promise.all([
-    Task.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+    Task.find(filter)
+      .sort({ createdAt: sort === "newest" ? -1 : 1 })
+      .skip(skip)
+      .limit(limit),
     Task.countDocuments(filter),
   ]);
 

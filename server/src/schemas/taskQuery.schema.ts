@@ -5,6 +5,7 @@ const taskQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(10),
   completed: z.enum(["true", "false"]).optional(),
   search: z.string().trim().max(100).optional(),
+  sort: z.enum(["newest", "oldest"]).default("newest"),
 });
 
 export default taskQuerySchema;
