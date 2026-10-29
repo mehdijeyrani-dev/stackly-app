@@ -3,6 +3,10 @@ import Task from "../models/Task.js";
 import { isValidObjectId } from "mongoose";
 import type { QueryFilter } from "mongoose";
 
+const escapeRegex = (value: string): string => {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+};
+
 export const createTask: RequestHandler = async (req, res) => {
   const { title, description } = req.body;
 
@@ -40,9 +44,11 @@ export const getTasks: RequestHandler = async (_req, res) => {
   }
 
   if (search) {
+    const escapedSearch = escapeRegex(search);
+
     filter.$or = [
-      { title: { $regex: search, $options: "i" } },
-      { description: { $regex: search, $options: "i" } },
+      { title: { $regex: escapedSearch, $options: "i" } },
+      { description: { $regex: escapedSearch, $options: "i" } },
     ];
   }
 
