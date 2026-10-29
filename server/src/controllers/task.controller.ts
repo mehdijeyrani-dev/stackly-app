@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import Task from "../models/Task.js";
 import { isValidObjectId } from "mongoose";
+import type { QueryFilter } from "mongoose";
 
 export const createTask: RequestHandler = async (req, res) => {
   const { title, description } = req.body;
@@ -20,12 +21,26 @@ export const getTasks: RequestHandler = async (req, res) => {
   const page = Math.max(Number(req.query.page) || 1, 1);
   const limit = Math.min(Math.max(Number(req.query.limit) || 10, 1), 100);
 
-  const filter: { completed?: boolean } = {};
+  const filter: QueryFilter<{
+    title: string;
+    description: string;
+    completed: boolean;
+  }> = {};
 
   if (req.query.completed === "true") {
     filter.completed = true;
   } else if (req.query.completed === "false") {
     filter.completed = false;
+  }
+
+  const search =
+    typeof req.query.search === "string" ? req.query.search.trim() : "";
+
+  if (search) {
+    filter.$or = [
+      { title: { $regex: search, $options: "i" } },
+      { description: { $regex: search, $options: "i" } },
+    ];
   }
 
   const skip = (page - 1) * limit;
