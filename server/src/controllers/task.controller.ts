@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { isValidObjectId } from "mongoose";
 import {
   createTaskService,
@@ -11,11 +11,15 @@ import type { TaskQuery } from "../schemas/taskQuery.schema.js";
 import type { CreateTaskOutput } from "../schemas/task.schema.js";
 import type { UpdateTaskOutput } from "../schemas/updateTask.schema.js";
 
-export const createTask: RequestHandler<
-  Record<string, string>,
-  unknown,
-  CreateTaskOutput
-> = async (req, res) => {
+type TaskRequestHandler<
+  TBody = unknown,
+  TLocals extends Record<string, unknown> = Record<string, unknown>,
+> = RequestHandler<Record<string, string>, unknown, TBody, unknown, TLocals>;
+
+export const createTask: TaskRequestHandler<CreateTaskOutput> = async (
+  req,
+  res,
+) => {
   const { title, description } = req.body;
 
   const task = await createTaskService({
@@ -29,10 +33,7 @@ export const createTask: RequestHandler<
   });
 };
 
-export const getTasks: RequestHandler<
-  Record<string, string>,
-  unknown,
-  unknown,
+export const getTasks: TaskRequestHandler<
   unknown,
   { validatedQuery: TaskQuery }
 > = async (_req, res) => {
@@ -47,7 +48,7 @@ export const getTasks: RequestHandler<
   });
 };
 
-export const getTaskById: RequestHandler = async (req, res) => {
+export const getTaskById: TaskRequestHandler = async (req, res) => {
   const { id } = req.params;
 
   if (!isValidObjectId(id)) {
@@ -74,11 +75,10 @@ export const getTaskById: RequestHandler = async (req, res) => {
   });
 };
 
-export const updateTask: RequestHandler<
-  Record<string, string>,
-  unknown,
-  UpdateTaskOutput
-> = async (req, res) => {
+export const updateTask: TaskRequestHandler<UpdateTaskOutput> = async (
+  req,
+  res,
+) => {
   const { id } = req.params;
 
   if (!isValidObjectId(id)) {
@@ -105,7 +105,7 @@ export const updateTask: RequestHandler<
   });
 };
 
-export const deleteTask: RequestHandler = async (req, res) => {
+export const deleteTask: TaskRequestHandler = async (req, res) => {
   const { id } = req.params;
 
   if (!isValidObjectId(id)) {
