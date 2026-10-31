@@ -7,9 +7,15 @@ import {
   getTasksService,
   updateTaskService,
 } from "../services/task.service.js";
-import { TaskQuery } from "../schemas/taskQuery.schema.js";
+import type { TaskQuery } from "../schemas/taskQuery.schema.js";
+import type { CreateTaskInput } from "../schemas/task.schema.js";
+import type { UpdateTaskInput } from "../schemas/updateTask.schema.js";
 
-export const createTask: RequestHandler = async (req, res) => {
+export const createTask: RequestHandler<
+  Record<string, string>,
+  unknown,
+  CreateTaskInput
+> = async (req, res) => {
   const { title, description } = req.body;
 
   const task = await createTaskService({
@@ -23,8 +29,14 @@ export const createTask: RequestHandler = async (req, res) => {
   });
 };
 
-export const getTasks: RequestHandler = async (_req, res) => {
-  const query = res.locals.validatedQuery as TaskQuery;
+export const getTasks: RequestHandler<
+  Record<string, string>,
+  unknown,
+  unknown,
+  unknown,
+  { validatedQuery: TaskQuery }
+> = async (_req, res) => {
+  const query = res.locals.validatedQuery;
 
   const result = await getTasksService(query);
 
@@ -62,7 +74,11 @@ export const getTaskById: RequestHandler = async (req, res) => {
   });
 };
 
-export const updateTask: RequestHandler = async (req, res) => {
+export const updateTask: RequestHandler<
+  Record<string, string>,
+  unknown,
+  UpdateTaskInput
+> = async (req, res) => {
   const { id } = req.params;
 
   if (!isValidObjectId(id)) {
