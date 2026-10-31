@@ -1,7 +1,7 @@
 import Task from "../models/Task.js";
-import { CreateTaskInput } from "../schemas/task.schema.js";
+import type { CreateTaskOutput } from "../schemas/task.schema.js";
 import type { TaskQuery } from "../schemas/taskQuery.schema.js";
-import { UpdateTaskInput } from "../schemas/updateTask.schema.js";
+import type { UpdateTaskOutput } from "../schemas/updateTask.schema.js";
 
 type TaskFilter = {
   completed?: boolean;
@@ -18,7 +18,7 @@ const escapeRegex = (value: string): string => {
 export const createTaskService = async ({
   title,
   description,
-}: CreateTaskInput) => {
+}: CreateTaskOutput) => {
   return Task.create({
     title,
     description,
@@ -85,7 +85,7 @@ export const getTaskByIdService = async (id: string | string[]) => {
 
 export const updateTaskService = async (
   id: string | string[],
-  updates: UpdateTaskInput,
+  updates: UpdateTaskOutput,
 ) => {
   return Task.findByIdAndUpdate(id, updates, {
     new: true,

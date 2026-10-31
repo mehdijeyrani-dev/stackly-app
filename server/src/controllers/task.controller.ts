@@ -8,13 +8,13 @@ import {
   updateTaskService,
 } from "../services/task.service.js";
 import type { TaskQuery } from "../schemas/taskQuery.schema.js";
-import type { CreateTaskInput } from "../schemas/task.schema.js";
-import type { UpdateTaskInput } from "../schemas/updateTask.schema.js";
+import type { CreateTaskOutput } from "../schemas/task.schema.js";
+import type { UpdateTaskOutput } from "../schemas/updateTask.schema.js";
 
 export const createTask: RequestHandler<
   Record<string, string>,
   unknown,
-  CreateTaskInput
+  CreateTaskOutput
 > = async (req, res) => {
   const { title, description } = req.body;
 
@@ -77,7 +77,7 @@ export const getTaskById: RequestHandler = async (req, res) => {
 export const updateTask: RequestHandler<
   Record<string, string>,
   unknown,
-  UpdateTaskInput
+  UpdateTaskOutput
 > = async (req, res) => {
   const { id } = req.params;
 
