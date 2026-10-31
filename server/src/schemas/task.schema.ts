@@ -5,4 +5,6 @@ const taskSchema = z.object({
   description: z.string().max(2000).optional(),
 });
 
+export type CreateTaskInput = z.infer<typeof taskSchema>;
+
 export default taskSchema;

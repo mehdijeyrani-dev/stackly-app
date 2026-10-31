@@ -1,12 +1,7 @@
 import Task from "../models/Task.js";
-
-type GetTasksParams = {
-  page: number;
-  limit: number;
-  completed?: "true" | "false";
-  search?: string;
-  sort: "newest" | "oldest";
-};
+import { CreateTaskInput } from "../schemas/task.schema.js";
+import type { TaskQuery } from "../schemas/taskQuery.schema.js";
+import { UpdateTaskInput } from "../schemas/updateTask.schema.js";
 
 type TaskFilter = {
   completed?: boolean;
@@ -23,10 +18,7 @@ const escapeRegex = (value: string): string => {
 export const createTaskService = async ({
   title,
   description,
-}: {
-  title: string;
-  description: string;
-}) => {
+}: CreateTaskInput) => {
   return Task.create({
     title,
     description,
@@ -39,7 +31,7 @@ export const getTasksService = async ({
   completed,
   search,
   sort,
-}: GetTasksParams) => {
+}: TaskQuery) => {
   const skip = (page - 1) * limit;
 
   const filter: TaskFilter = {};
@@ -93,11 +85,7 @@ export const getTaskByIdService = async (id: string | string[]) => {
 
 export const updateTaskService = async (
   id: string | string[],
-  updates: {
-    title?: string;
-    description?: string;
-    completed?: boolean;
-  },
+  updates: UpdateTaskInput,
 ) => {
   return Task.findByIdAndUpdate(id, updates, {
     new: true,

@@ -10,4 +10,6 @@ const updateTaskSchema = z
     message: "At least one field must be provided",
   });
 
+export type UpdateTaskInput = z.infer<typeof updateTaskSchema>;
+
 export default updateTaskSchema;

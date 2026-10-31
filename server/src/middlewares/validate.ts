@@ -1,7 +1,9 @@
 import { RequestHandler } from "express";
-import { ZodType } from "zod";
+import type { z, ZodType } from "zod";
 
-const validate = (schema: ZodType): RequestHandler => {
+const validate = <T extends ZodType>(
+  schema: T,
+): RequestHandler<Record<string, string>, unknown, z.output<T>, unknown> => {
   return (req, res, next) => {
     const result = schema.safeParse(req.body);
 

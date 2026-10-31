@@ -8,4 +8,7 @@ const taskQuerySchema = z.object({
   sort: z.enum(["newest", "oldest"]).default("newest"),
 });
 
+export type TaskQueryInput = z.input<typeof taskQuerySchema>;
+export type TaskQuery = z.output<typeof taskQuerySchema>;
+
 export default taskQuerySchema;

@@ -7,6 +7,7 @@ import {
   getTasksService,
   updateTaskService,
 } from "../services/task.service.js";
+import { TaskQuery } from "../schemas/taskQuery.schema.js";
 
 export const createTask: RequestHandler = async (req, res) => {
   const { title, description } = req.body;
@@ -23,13 +24,7 @@ export const createTask: RequestHandler = async (req, res) => {
 };
 
 export const getTasks: RequestHandler = async (_req, res) => {
-  const query = res.locals.validatedQuery as {
-    page: number;
-    limit: number;
-    completed?: "true" | "false";
-    search?: string;
-    sort: "newest" | "oldest";
-  };
+  const query = res.locals.validatedQuery as TaskQuery;
 
   const result = await getTasksService(query);
 
