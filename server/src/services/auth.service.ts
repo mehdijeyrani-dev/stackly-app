@@ -86,3 +86,19 @@ export const refreshSessionService = async (refreshToken: string) => {
     accessToken: newAccessToken,
   };
 };
+
+export const logoutService = async (refreshToken: string) => {
+  const refreshTokenHash = createHash("sha256")
+    .update(refreshToken)
+    .digest("hex");
+
+  await Session.findOneAndUpdate(
+    {
+      refreshTokenHash,
+      revokedAt: null,
+    },
+    {
+      revokedAt: new Date(),
+    },
+  );
+};

@@ -4,6 +4,7 @@ import {
   loginService,
   createSessionService,
   refreshSessionService,
+  logoutService,
 } from "../services/auth.service.js";
 import type { RegisterInput } from "../schemas/register.schema.js";
 import type { LoginInput } from "../schemas/login.schema.js";
@@ -77,7 +78,7 @@ export const loginController: RequestHandler<
   });
 };
 
-export const refresh: RequestHandler = async (req, res) => {
+export const refreshSessionController: RequestHandler = async (req, res) => {
   const refreshToken = req.cookies?.refreshToken;
 
   if (!refreshToken) {
@@ -93,5 +94,25 @@ export const refresh: RequestHandler = async (req, res) => {
   res.status(200).json({
     success: false,
     data: result,
+  });
+};
+
+export const logoutController: RequestHandler = async (req, res) => {
+  const refreshToken = req.cookies?.refreshToken;
+
+  if (refreshToken) {
+    await logoutService(refreshToken);
+  }
+
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: process.env.NODE_DEV === "production",
+    sameSite: "lax",
+    path: "/api/auth",
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "Logged out successfully",
   });
 };
