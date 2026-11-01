@@ -1,5 +1,6 @@
 import express from "express";
 import errorHandler from "./middlewares/errorHandler.js";
+import authRoutes from "./routes/auth.routes.js";
 import taskRoutes from "./routes/task.routes.js";
 
 const app = express();
@@ -13,6 +14,7 @@ app.get("/api/health", (_req, res) => {
   });
 });
 
+app.use("/api/auth", authRoutes);
 app.use("/api/tasks", taskRoutes);
 
 app.use((_req, res) => {
