@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import type { LoginInput } from "../schemas/login.schema.js";
 import type { RegisterInput } from "../schemas/register.schema.js";
 import bcrypt from "bcrypt";
 
@@ -18,6 +19,24 @@ export const registerService = async (data: RegisterInput) => {
     email: data.email,
     password: hashedPassword,
   });
+
+  return user;
+};
+
+export const loginService = async (data: LoginInput) => {
+  const user = await User.findOne({
+    email: data.email,
+  }).select("+password");
+
+  if (!user) {
+    throw new Error("Invalid email or password");
+  }
+
+  const isPasswordValid = await bcrypt.compare(data.password, user.password);
+
+  if (!isPasswordValid) {
+    throw new Error("Invalid email or password");
+  }
 
   return user;
 };

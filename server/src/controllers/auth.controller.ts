@@ -1,6 +1,11 @@
 import type { RequestHandler } from "express";
-import { RegisterInput } from "../schemas/register.schema.js";
-import { registerService } from "../services/auth.service.js";
+import { registerService, loginService } from "../services/auth.service.js";
+import type { RegisterInput } from "../schemas/register.schema.js";
+import type { LoginInput } from "../schemas/login.schema.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../utils//jwt.util.js";
 
 export const registerController: RequestHandler<
   Record<string, string>,
@@ -32,4 +37,28 @@ export const registerController: RequestHandler<
 
     throw error;
   }
+};
+
+export const loginController: RequestHandler<
+  Record<string, string>,
+  unknown,
+  LoginInput
+> = async (req, res) => {
+  const user = await loginService(req.body);
+
+  const accessToken = generateAccessToken(user._id.toString());
+  const refreshToken = generateRefreshToken(user._id.toString());
+
+  res.status(200).json({
+    success: true,
+    data: {
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+      accessToken,
+      refreshToken,
+    },
+  });
 };
