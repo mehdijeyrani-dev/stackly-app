@@ -1,5 +1,9 @@
 import type { RequestHandler } from "express";
-import { registerService, loginService } from "../services/auth.service.js";
+import {
+  registerService,
+  loginService,
+  createSessionService,
+} from "../services/auth.service.js";
 import type { RegisterInput } from "../schemas/register.schema.js";
 import type { LoginInput } from "../schemas/login.schema.js";
 import {
@@ -48,6 +52,8 @@ export const loginController: RequestHandler<
 
   const accessToken = generateAccessToken(user._id.toString());
   const refreshToken = generateRefreshToken(user._id.toString());
+
+  await createSessionService(user._id.toString(), refreshToken);
 
   res.status(200).json({
     success: true,

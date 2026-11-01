@@ -1,7 +1,9 @@
+import { createHash } from "crypto";
 import User from "../models/user.model.js";
 import type { LoginInput } from "../schemas/login.schema.js";
 import type { RegisterInput } from "../schemas/register.schema.js";
 import bcrypt from "bcrypt";
+import Session from "../models/session.model.js";
 
 export const registerService = async (data: RegisterInput) => {
   const existingUser = await User.findOne({
@@ -39,4 +41,17 @@ export const loginService = async (data: LoginInput) => {
   }
 
   return user;
+};
+
+export const createSessionService = async (userId: string, refreshToken: string) => {
+  const refreshTokenHash = createHash("sha256")
+    .update(refreshToken)
+    .digest("hex");
+
+  const session = await Session.create({
+    userId,
+    refreshTokenHash,
+    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+  });
+  return session;
 };
