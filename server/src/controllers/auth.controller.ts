@@ -12,6 +12,7 @@ import {
   generateAccessToken,
   generateRefreshToken,
 } from "../utils//jwt.util.js";
+import User from "../models/user.model.js";
 
 export const registerController: RequestHandler<
   Record<string, string>,
@@ -114,5 +115,24 @@ export const logoutController: RequestHandler = async (req, res) => {
   res.status(200).json({
     success: true,
     message: "Logged out successfully",
+  });
+};
+
+export const getMe: RequestHandler = async (req, res) => {
+  const user = await User.findById(req.userId).select(
+    "name email isEmailVerified createAt",
+  );
+
+  if (!user) {
+    res.status(404).json({
+      success: false,
+      message: "User not found",
+    });
+    return;
+  }
+
+  res.status(200).json({
+    success: true,
+    data: user,
   });
 };
