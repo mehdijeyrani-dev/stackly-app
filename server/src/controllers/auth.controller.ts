@@ -90,12 +90,36 @@ export const refreshSessionController: RequestHandler = async (req, res) => {
     return;
   }
 
-  const result = await refreshSessionService(refreshToken);
+  try {
+    const result = await refreshSessionService(refreshToken);
 
-  res.status(200).json({
-    success: false,
-    data: result,
-  });
+    res.cookie("refreshToken", result.refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/api/auth",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.status(200).json({
+      success: true,
+      data: {
+        accessToken: result.accessToken,
+      },
+    });
+  } catch {
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/api/auth",
+    });
+
+    res.status(401).json({
+      success: false,
+      message: "Invalid or expired refresh token",
+    });
+  }
 };
 
 export const logoutController: RequestHandler = async (req, res) => {

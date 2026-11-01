@@ -4,7 +4,11 @@ import type { LoginInput } from "../schemas/login.schema.js";
 import type { RegisterInput } from "../schemas/register.schema.js";
 import bcrypt from "bcrypt";
 import Session from "../models/session.model.js";
-import { generateAccessToken, verifyRefreshToken } from "../utils/jwt.util.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+} from "../utils/jwt.util.js";
 
 export const registerService = async (data: RegisterInput) => {
   const existingUser = await User.findOne({
@@ -65,25 +69,35 @@ export const refreshSessionService = async (refreshToken: string) => {
     userId: string;
   };
 
-  const refreshTokenHash = createHash("sha256")
-    .update(refreshToken)
-    .digest("hex");
+  const oldHash = createHash("sha256").update(refreshToken).digest("hex");
 
-  const session = await Session.findOne({
-    userId: payload.userId,
-    refreshTokenHash,
-    expiresAt: { $gt: new Date() },
-    revokedAt: null,
-  });
+  const newRefreshToken = generateRefreshToken(payload.userId);
+
+  const newHash = createHash("sha256").update(newRefreshToken).digest("hex");
+
+  const session = await Session.findOneAndUpdate(
+    {
+      userId: payload.userId,
+      refreshTokenHash: oldHash,
+      expiresAt: { $gt: new Date() },
+      revokedAt: null,
+    },
+    {
+      refreshTokenHash: newHash,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    },
+    {
+      new: true,
+    },
+  );
 
   if (!session) {
     throw new Error("Invalid refresh token");
   }
 
-  const newAccessToken = generateAccessToken(payload.userId);
-
   return {
-    accessToken: newAccessToken,
+    accessToken: generateAccessToken(payload.userId),
+    refreshToken: newRefreshToken,
   };
 };
 
