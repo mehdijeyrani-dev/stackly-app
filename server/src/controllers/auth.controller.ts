@@ -3,6 +3,7 @@ import {
   registerService,
   loginService,
   createSessionService,
+  refreshSessionService,
 } from "../services/auth.service.js";
 import type { RegisterInput } from "../schemas/register.schema.js";
 import type { LoginInput } from "../schemas/login.schema.js";
@@ -55,6 +56,14 @@ export const loginController: RequestHandler<
 
   await createSessionService(user._id.toString(), refreshToken);
 
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/api/auth",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+
   res.status(200).json({
     success: true,
     data: {
@@ -64,7 +73,25 @@ export const loginController: RequestHandler<
         email: user.email,
       },
       accessToken,
-      refreshToken,
     },
+  });
+};
+
+export const refresh: RequestHandler = async (req, res) => {
+  const refreshToken = req.cookies?.refreshToken;
+
+  if (!refreshToken) {
+    res.status(401).json({
+      success: false,
+      message: "Refresh token is required",
+    });
+    return;
+  }
+
+  const result = await refreshSessionService(refreshToken);
+
+  res.status(200).json({
+    success: false,
+    data: result,
   });
 };
