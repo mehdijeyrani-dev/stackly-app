@@ -5,6 +5,8 @@ import {
   createSessionService,
   refreshSessionService,
   logoutService,
+  forgotPasswordService,
+  resetPasswordService,
 } from "../services/auth.service.js";
 import type { RegisterInput } from "../schemas/register.schema.js";
 import type { LoginInput } from "../schemas/login.schema.js";
@@ -13,6 +15,8 @@ import {
   generateRefreshToken,
 } from "../utils//jwt.util.js";
 import User from "../models/user.model.js";
+import type { ForgotPasswordInput } from "../schemas/forgotPassword.schema.js";
+import type { ResetPasswordInput } from "../schemas/resetPassword.schema.js";
 
 export const registerController: RequestHandler<
   Record<string, string>,
@@ -159,4 +163,38 @@ export const getMe: RequestHandler = async (req, res) => {
     success: true,
     data: user,
   });
+};
+
+export const forgotPasswordController: RequestHandler<
+  Record<string, string>,
+  unknown,
+  ForgotPasswordInput
+> = async (req, res) => {   
+  await forgotPasswordService(req.body);
+
+  res.status(200).json({
+    success: true,
+    message:
+      "If an account exists with this email, password reset instructions will be sent.",
+  });
+};
+
+export const resetPasswordController: RequestHandler<
+  Record<string, string>,
+  unknown,
+  ResetPasswordInput
+> = async (req, res) => {
+  try {
+    await resetPasswordService(req.body);
+
+    res.status(200).json({
+      success: true,
+      message: "Password reset successfully",
+    });
+  } catch {
+    res.status(400).json({
+      success: false,
+      message: "Invalid or expired reset token",
+    });
+  }
 };

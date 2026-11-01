@@ -1,4 +1,4 @@
-import { createHash } from "crypto";
+import { createHash, randomBytes } from "crypto";
 import User from "../models/user.model.js";
 import type { LoginInput } from "../schemas/login.schema.js";
 import type { RegisterInput } from "../schemas/register.schema.js";
@@ -9,6 +9,8 @@ import {
   generateRefreshToken,
   verifyRefreshToken,
 } from "../utils/jwt.util.js";
+import type { ForgotPasswordInput } from "../schemas/forgotPassword.schema.js";
+import type { ResetPasswordInput } from "../schemas/resetPassword.schema.js";
 
 export const registerService = async (data: RegisterInput) => {
   const existingUser = await User.findOne({
@@ -115,4 +117,52 @@ export const logoutService = async (refreshToken: string) => {
       revokedAt: new Date(),
     },
   );
+};
+
+export const forgotPasswordService = async (data: ForgotPasswordInput) => {
+  const user = await User.findOne({
+    email: data.email,
+  });
+
+  if (!user) {
+    return null;
+  }
+
+  const resetToken = randomBytes(32).toString("hex");
+
+  const resetPasswordTokenHash = createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  user.resetPasswordTokenHash = resetPasswordTokenHash;
+
+  user.resetPasswordExpiresAt = new Date(Date.now() + 15 * 60 * 1000);
+
+  await user.save();
+
+  console.log("Password Reset Token:", resetToken);
+
+  return resetToken;
+};
+
+export const resetPasswordService = async (data: ResetPasswordInput) => {
+  const resetTokenHash = createHash("sha256").update(data.token).digest("hex");
+
+  const user = await User.findOne({
+    resetPasswordTokenHash: resetTokenHash,
+    resetPasswordExpiresAt: { $gt: new Date() },
+  }).select("+resetPasswordTokenHash +resetPasswordExpiresAt");
+
+  if (!user) {
+    throw new Error("Invalid or expired reset token");
+  }
+
+  user.password = await bcrypt.hash(data.password, 12);
+
+  user.resetPasswordTokenHash = undefined;
+  user.resetPasswordExpiresAt = undefined;
+
+  await user.save();
+
+  return user;
 };
