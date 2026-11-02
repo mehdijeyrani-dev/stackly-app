@@ -35,6 +35,14 @@ export const registerController: RequestHandler<
       },
     });
   } catch (error) {
+    if (error instanceof Error && (error as any).code === 11000) {
+      res.status(409).json({
+        success: false,
+        message: "Email already registered",
+      });
+      return;
+    }
+
     if (
       error instanceof Error &&
       error.message === "Email already registered"

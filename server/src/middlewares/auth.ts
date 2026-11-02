@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import { verifyAccessToken } from "../utils/jwt.util.js";
+import User from "../models/user.model.js";
 
 declare global {
   namespace Express {
@@ -9,7 +10,7 @@ declare global {
   }
 }
 
-const auth: RequestHandler = (req, res, next) => {
+const auth: RequestHandler = async (req, res, next) => {
   try {
     const authorization = req.headers.authorization;
 
@@ -29,12 +30,31 @@ const auth: RequestHandler = (req, res, next) => {
 
     req.userId = payload.userId;
 
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+      return;
+    }
+
     next();
-  } catch {
-    res.status(401).json({
-      success: false,
-      message: "Invalid or expired access token",
-    });
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      (error.name === "JsonWebTokenError" ||
+        error.name === "TokenExpiredError" ||
+        error.name === "NotBeforeError")
+    ) {
+      res.status(401).json({
+        success: false,
+        message: "Invalid or expired access token",
+      });
+      return;
+    }
+    next(error);
   }
 };
 
