@@ -9,11 +9,14 @@ import {
   refreshSessionController,
   registerController,
   resetPasswordController,
+  sendVerificationEmailController,
+  verifyEmailController,
 } from "../controllers/auth.controller.js";
 import loginSchema from "../schemas/login.schema.js";
 import auth from "../middlewares/auth.js";
 import forgotPasswordSchema from "../schemas/forgotPassword.schema.js";
 import resetPasswordSchema from "../schemas/resetPassword.schema.js";
+import verifyEmailSchema from "../schemas/verifyEmail.schema.js";
 
 const router = Router();
 
@@ -31,6 +34,12 @@ router.post(
   "/reset-password",
   validate(resetPasswordSchema),
   resetPasswordController,
+);
+router.post("/send-verification-email", auth, sendVerificationEmailController);
+router.post(
+  "/verify-email",
+  validate(verifyEmailSchema),
+  verifyEmailController,
 );
 
 export default router;

@@ -7,6 +7,8 @@ import {
   logoutService,
   forgotPasswordService,
   resetPasswordService,
+  sendVerificationEmailService,
+  verifyEmailService,
 } from "../services/auth.service.js";
 import type { RegisterInput } from "../schemas/register.schema.js";
 import type { LoginInput } from "../schemas/login.schema.js";
@@ -221,5 +223,53 @@ export const resetPasswordController: RequestHandler<
       success: false,
       message: "Invalid or expired reset token",
     });
+  }
+};
+
+export const sendVerificationEmailController: RequestHandler = async (
+  req,
+  res,
+) => {
+  try {
+    await sendVerificationEmailService(req.userId!);
+
+    res.status(200).json({
+      success: true,
+      message: "Verification email sent successfully",
+    });
+  } catch (error) {
+    if (error instanceof Error && error.message === "Email already verified") {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+      return;
+    }
+
+    throw error;
+  }
+};
+
+export const verifyEmailController: RequestHandler = async (req, res) => {
+  try {
+    await verifyEmailService(req.body.token);
+
+    res.status(200).json({
+      success: true,
+      message: "Email verified successfully",
+    });
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message === "Invalid or expired verification token"
+    ) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+      return;
+    }
+
+    throw error;
   }
 };

@@ -11,6 +11,7 @@ import {
 } from "../utils/jwt.util.js";
 import type { ForgotPasswordInput } from "../schemas/forgotPassword.schema.js";
 import type { ResetPasswordInput } from "../schemas/resetPassword.schema.js";
+import sendEmail from "../utils/email.util.js";
 
 export const registerService = async (data: RegisterInput) => {
   const existingUser = await User.findOne({
@@ -171,6 +172,59 @@ export const resetPasswordService = async (data: ResetPasswordInput) => {
     },
     { revokedAt: new Date() },
   );
+
+  return user;
+};
+
+export const sendVerificationEmailService = async (userId: string) => {
+  const user = await User.findById(userId);
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  if (user.isEmailVerified) {
+    throw new Error("Email already verified");
+  }
+
+  const verificationToken = randomBytes(32).toString("hex");
+
+  const verificationTokenHash = createHash("sha256")
+    .update(verificationToken)
+    .digest("hex");
+
+  user.emailVerificationTokenHash = verificationTokenHash;
+  user.emailVerificationExpiresAt = new Date(Date.now() + 15 * 60 * 1000);
+
+  await user.save();
+
+  const verificationUrl = `${process.env.CLIENT_URL}/verify-email?token=${verificationToken}`;
+
+  await sendEmail({
+    to: user.email,
+    subject: "Verify your Stackly account",
+    text: `Verify your email by opening this link: ${verificationUrl}`,
+    html: `<p>Click the link below to verify your email:</p><a href="${verificationUrl}">Verify Email</a>`,
+  });
+};
+
+export const verifyEmailService = async (token: string) => {
+  const tokenHash = createHash("sha256").update(token).digest("hex");
+
+  const user = await User.findOne({
+    emailVerificationTokenHash: tokenHash,
+    emailVerificationExpiresAt: { $gt: new Date() },
+  }).select("+emailVerificationTokenHash +emailVerificationExpiresAt");
+
+  if (!user) {
+    throw new Error("Invalid or expired verification token");
+  }
+
+  user.isEmailVerified = true;
+  user.emailVerificationTokenHash = undefined;
+  user.emailVerificationExpiresAt = undefined;
+
+  await user.save();
 
   return user;
 };
