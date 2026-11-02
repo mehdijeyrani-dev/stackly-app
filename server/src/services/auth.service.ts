@@ -140,7 +140,7 @@ export const forgotPasswordService = async (data: ForgotPasswordInput) => {
 
   await user.save();
 
-  console.log("Password Reset Token:", resetToken);
+  // console.log("Password Reset Token:", resetToken);
 
   return resetToken;
 };
@@ -163,6 +163,14 @@ export const resetPasswordService = async (data: ResetPasswordInput) => {
   user.resetPasswordExpiresAt = undefined;
 
   await user.save();
+
+  await Session.updateMany(
+    {
+      userId: user._id,
+      revokedAt: null,
+    },
+    { revokedAt: new Date() },
+  );
 
   return user;
 };

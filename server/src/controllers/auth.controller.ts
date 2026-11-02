@@ -55,7 +55,24 @@ export const loginController: RequestHandler<
   unknown,
   LoginInput
 > = async (req, res) => {
-  const user = await loginService(req.body);
+  let user;
+
+  try {
+    user = await loginService(req.body);
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message === "Invalid email or password"
+    ) {
+      res.status(401).json({
+        success: false,
+        message: "Invalid email or password",
+      });
+      return;
+    }
+
+    throw error;
+  }
 
   const accessToken = generateAccessToken(user._id.toString());
   const refreshToken = generateRefreshToken(user._id.toString());
@@ -169,7 +186,7 @@ export const forgotPasswordController: RequestHandler<
   Record<string, string>,
   unknown,
   ForgotPasswordInput
-> = async (req, res) => {   
+> = async (req, res) => {
   await forgotPasswordService(req.body);
 
   res.status(200).json({
