@@ -4,7 +4,6 @@ import SidebarHeader from "./SidebarHeader";
 import SidebarAction from "./SidebarAction";
 import SidebarOptions from "./SidebarOptions";
 import SidebarNavigation from "./SidebarNavigation";
-import SidebarInfo from "./SidebarInfo";
 
 const Sidebar = () => {
   const { isOpen } = useSidebarStore();
@@ -18,7 +17,6 @@ const Sidebar = () => {
         <SidebarAction />
         <SidebarNavigation />
         <SidebarOptions />
-        <SidebarInfo />
       </aside>
   );
 };

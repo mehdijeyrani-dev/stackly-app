@@ -1,5 +1,5 @@
 import { useLayoutEffect } from "react";
-import { useThemeStore } from "../stores/themeStore";
+import { useThemeStore } from "../../../stores/themeStore";
 
 function ThemeController() {
   const theme = useThemeStore((state) => state.theme);
