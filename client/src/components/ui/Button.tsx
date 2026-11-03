@@ -44,7 +44,7 @@ const colorStyles: Record<Color, Record<Variant, string>> = {
     solid:
       "bg-blue-500/10 hover:bg-blue-500/20 border-transparent text-blue-500",
     outline:
-      "bg-blue-500/5 hover:bg-blue-500/10 border-blue-500/10 text-blue-500",
+      "bg-blue-500/5 hover:bg-blue-500/10 border-blue-500/20 text-blue-500",
     ghost:
       "bg-transparent hover:bg-blue-500/10 border-transparent text-blue-500",
     link: "bg-transparent underline-offset-4 hover:underline border-transparent text-blue-500",

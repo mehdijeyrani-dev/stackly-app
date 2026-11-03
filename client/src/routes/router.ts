@@ -8,7 +8,7 @@ import {
   Reporting,
   Today,
   Upcoming,
-} from "@/pages";
+} from "@/pages/dashboard";
 import { createBrowserRouter } from "react-router";
 
 export const router = createBrowserRouter([
