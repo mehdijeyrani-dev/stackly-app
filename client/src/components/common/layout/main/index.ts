@@ -1,4 +1,4 @@
 export { Header } from "./Header";
-export { Sidebar } from "./sidebar";
-export { SidebarToggle } from "./sidebar";
+export { Sidebar } from "./Sidebar";
+export { SidebarToggle } from "./Sidebar";
 export { SubTitle } from "./SubHeader";
