@@ -1,1 +1,3 @@
-export const handlers = [];
+import { taskHandlers } from "./tasks.handlers";
+
+export const handlers = [...taskHandlers];
