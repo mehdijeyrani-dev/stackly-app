@@ -1,5 +1,18 @@
-export const getTasks = () => {};
-export const getTaskById = () => {};
-export const createTask = () => {};
-export const updateTask = () => {};
-export const deleteTask = () => {};
+import type { Task, TaskQueryParams } from "@/types/task.types";
+import { api } from "./api";
+import type { ApiResponse, Pagination } from "@/types/api.types";
+
+interface GetTasksResponse {
+  tasks: Task[];
+  pagination: Pagination;
+}
+
+export const taskService = {
+  getTasks: async (params?: TaskQueryParams) => {
+    const { data } = await api.get<ApiResponse<GetTasksResponse>>("/tasks", {
+      params,
+    });
+
+    return data.data;
+  },
+};
