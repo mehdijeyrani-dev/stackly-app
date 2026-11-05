@@ -5,7 +5,7 @@ import MobileBottomNav from "./MobileBottomNav";
 
 const Dashboard = () => {
   return (
-    <div className="relative w-full h-dvh overflow-hidden">
+    <div className="relative w-full flex h-dvh overflow-hidden">
       <MobileTop/>
       <SidebarToggle />
       <Sidebar />
