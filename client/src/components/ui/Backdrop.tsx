@@ -1,9 +1,4 @@
-import {
-  useEffect,
-  useState,
-  type HTMLAttributes,
-  type ReactNode,
-} from "react";
+import { type HTMLAttributes, type ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface BackdropProps extends HTMLAttributes<HTMLDivElement> {
@@ -17,28 +12,12 @@ const Backdrop = ({
   className = "",
   ...props
 }: BackdropProps) => {
-  const [shouldRender, setShouldRender] = useState(isOpen);
-
-  useEffect(() => {
-    if (isOpen) {
-      setShouldRender(true);
-    }
-  }, [isOpen]);
-
-  if (!shouldRender) return null;
-
   return (
     <div
       aria-hidden="true"
-      onAnimationEnd={(event) => {
-        if (event.target === event.currentTarget && !isOpen) {
-          setShouldRender(false);
-        }
-      }}
       className={twMerge(
-        "fixed inset-0 z-999 backdrop-blur-[1px]",
-        isOpen ? "animate-blur-fade-in" : "animate-blur-fade-out",
-        className
+        "fixed inset-0 z-999 backdrop-blur-[2px] animate-blur-fade-in",
+        className,
       )}
       {...props}
     >

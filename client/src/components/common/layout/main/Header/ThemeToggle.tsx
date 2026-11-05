@@ -10,23 +10,11 @@ const ThemeToggle = () => {
     <Button
       variant="outline"
       color="secondary"
-      className="size-6 md:size-8 hover:bg-surface-secondary rounded-md border-surface-border p-0"
+      className="size-6 md:size-8 rounded-md p-0 [&_svg]:size-4 md:[&_svg]:size-5"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
     >
-      {theme === "dark" ? (
-        <Sun
-          size={20}
-          strokeWidth={1}
-          className="shrink-0 size-fit xs:size-4 md:size-auto"
-        />
-      ) : (
-        <Moon
-          size={20}
-          strokeWidth={1}
-          className="shrink-0 size-fit xs:size-4 md:size-auto"
-        />
-      )}
+      {theme === "dark" ? <Sun strokeWidth={1} /> : <Moon strokeWidth={1} />}
     </Button>
   );
 };

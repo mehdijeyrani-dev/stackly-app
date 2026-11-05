@@ -82,13 +82,9 @@
   --color-destructive: var(--destructive);
   --animate-scale-slide-in: scale-slide-in 300ms
     cubic-bezier(0.45, 0.09, 0.37, 0.96) both;
-
   --animate-scale-slide-out: scale-slide-out 300ms
     cubic-bezier(0.45, 0.09, 0.37, 0.96) both;
-
   --animate-blur-fade-in: blur-fade-in 200ms ease-out forwards;
-
-  --animate-blur-fade-out: blur-fade-out 200ms ease-in forwards;
 
   @keyframes scale-slide-in {
     0% {
@@ -108,7 +104,7 @@
     }
     100% {
       opacity: 0;
-      transform: translateY(140px) scale(0.01);
+      transform: translateY(140px) scale(0);
     }
   }
 
@@ -118,24 +114,6 @@
     }
     to {
       backdrop-filter: blur(2px);
-    }
-  }
-
-  @keyframes blur-fade-out {
-    from {
-      backdrop-filter: blur(2px);
-    }
-    to {
-      backdrop-filter: blur(0);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .animate-scale-slide-in,
-    .animate-scale-slide-out,
-    .animate-blur-fade-in,
-    .animate-blur-fade-out {
-      animation: none;
     }
   }
 }
@@ -193,4 +171,18 @@ html.theme-changing *::after {
 .tag {
   font-size: calc(3rem - (sibling-count() * 0.1rem));
   @apply px-2 py-1 bg-neutral-800 rounded-md;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-scale-slide-in,
+  .animate-scale-slide-out,
+  .animate-blur-fade-in,
+  .animate-blur-fade-out {
+    animation: none;
+  }
+}
+
+.input-rest {
+  all: unset;
+  box-sizing: border-box;
 }
